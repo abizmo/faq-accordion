@@ -1,17 +1,17 @@
 ---
 interface Props {
-  href: string
-  codedBy: string
+  href: string;
+  codedBy: string;
 }
 
-const { href, codedBy } = Astro.props
+const { href, codedBy } = Astro.props;
 ---
 
 <div class='attribution'>
   Challenge by <a
     href='https://www.frontendmentor.io?ref=challenge'
     target='_blank'>Frontend Mentor</a
-  >. Coded by <a href={href}>codedBy</a>.
+  >. Coded by <a href={href}>{codedBy}</a>.
 </div>
 
 <style>
