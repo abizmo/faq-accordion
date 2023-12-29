@@ -1,32 +1,145 @@
 ---
 type Faq = {
-  question: string
-  answer: string
-}
+  question: string;
+  answer: string;
+};
 
 interface Props {
-  faqs: Faq[]
+  faqs: Faq[];
 }
 
-const { faqs } = Astro.props
+const { faqs } = Astro.props;
 ---
 
 <div class='faqs'>
-  <header class='faqs-header'>
-    <img src='#' alt='header-icon' />
-    <h3>FAQs</h3>
+  <header class='faqs__header'>
+    <img class='faqs__header-icon' src='./images/icon-star.svg' alt='star' />
+    <h3 class='faqs__title'>FAQs</h3>
   </header>
-  <ul>
+  <ul class='faqs__list' role='tablist' aria-label='Frequently Asked Questions'>
     {
-      faqs.map((faq) => (
-        <li>
-          <div class='question'>
-            <h4>{faq.question}</h4>
-            <img src='#' alt='icon' />
+      faqs.map((faq, index) => (
+        <li class='faqs__item'>
+          <div
+            class='faqs__question-tab'
+            role='tab'
+            aria-selected={index === 0 ? 'true' : 'false'}
+            aria-controls={`faq-${index}`}
+          >
+            <h4 class='faqs__question-text'>{faq.question}</h4>
+            <img class='plus-icon' src='./images/icon-plus.svg' alt='open' />
+            <img class='minus-icon' src='./images/icon-minus.svg' alt='close' />
           </div>
-          <p class='answer'>{faq.answer}</p>
+          <p
+            hidden={index !== 0}
+            class='faqs__answer'
+            role='tabpanel'
+            id={`faq-${index}`}
+          >
+            {faq.answer}
+          </p>
         </li>
       ))
     }
   </ul>
 </div>
+
+<script>
+  const tabs = document.querySelectorAll('.faqs__question-tab');
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', (evt) => {
+      const targetTab = (evt.target as HTMLElement).closest(
+        '.faqs__question-tab',
+      ) as HTMLElement;
+
+      hideAnswer();
+      showAnswer(targetTab);
+    });
+  });
+
+  function showAnswer(tab: HTMLElement) {
+    const answerId = tab?.getAttribute('aria-controls') as string;
+    const targetAnswer = document.getElementById(answerId);
+
+    tab?.setAttribute('aria-selected', 'true');
+    targetAnswer?.removeAttribute('hidden');
+  }
+
+  function hideAnswer() {
+    document
+      .querySelectorAll('.faqs__answer')
+      .forEach((answer) => answer.setAttribute('hidden', 'true'));
+    document
+      .querySelectorAll('.faqs__question-tab')
+      .forEach((tab) => tab.setAttribute('aria-selected', 'false'));
+  }
+</script>
+
+<style>
+  .faqs {
+    padding: var(--padding, 1rem);
+    border-radius: 1rem;
+    background-color: hsl(var(--clr-100));
+    box-shadow: 0px 25px 50px -12px hsla(var(--clr-500) / 0.5);
+  }
+
+  .faqs__header {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+  }
+
+  .faqs__header-icon {
+    width: 1.5em;
+    height: 1.5em;
+  }
+
+  .faqs__title {
+    font-size: var(--fs-900);
+    margin: 0;
+  }
+
+  .faqs__item:not(:last-child) {
+    border-bottom: 1px solid hsla(var(--clr-500) / 0.1);
+  }
+
+  .faqs__question-tab {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5em;
+    cursor: pointer;
+  }
+
+  .minus-icon {
+    display: none;
+  }
+
+  .faqs__question-tab[aria-selected='true'] .minus-icon {
+    display: block;
+  }
+
+  .faqs__question-tab[aria-selected='true'] .plus-icon {
+    display: none;
+  }
+
+  .faqs__question-tab:hover .faqs__question-text {
+    color: hsl(var(--clr-accent));
+  }
+
+  .faqs__question-text {
+    font-size: var(--fs-600);
+    font-weight: var(--fw-medium);
+  }
+
+  .faqs__answer {
+    margin-top: 0;
+  }
+
+  @media (min-width: 600px) {
+    .faqs__header-icon {
+      width: 2.5em;
+      height: 2.5em;
+    }
+  }
+</style>

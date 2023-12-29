@@ -1,16 +1,27 @@
 :root {
   --clr-100: 0 0% 100%;
   --clr-300: 275 100% 97%;
-  --clr-500: 292 16% 97%;
+  --clr-500: 292 16% 49%;
   --clr-900: 292 42% 14%;
+  --clr-accent: 292 83% 54%;
 
   --ff-sans: 'Work Sans', sans-serif;
 
-  --fs-400: 1rem;
+  --fs-900: 2rem;
+  --fs-600: 1.125rem;
+  --fs-400: 0.875rem;
 
   --fw-regular: 400;
   --fw-medium: 600;
   --fw-bold: 700;
+}
+
+@media (min-width: 37.5rem) {
+  :root {
+    --fs-900: 3rem;
+    --fs-600: 1.25rem;
+    --fs-400: 1rem;
+  }
 }
 
 *,
@@ -27,9 +38,18 @@ html {
 body {
   margin: 0;
   background-color: hsl(var(--clr-300));
+  color: hsl(var(--clr-500));
+  font-size: var(--fs-400);
 }
 
 ul {
   list-style: none;
+  margin: 0;
   padding: 0;
+}
+
+h3,
+h4 {
+  line-height: 1.1;
+  color: hsl(var(--clr-900));
 }
